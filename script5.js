@@ -79,7 +79,8 @@ async function train(model, data) {
 	return model.fit(trainXs, trainYs, {
 		batchSize: BATCH_SIZE,
 		validationData: [testXs, testYs],
-		epochs: 10,
+		// epochs: 10,
+    epochs: 1,
 		shuffle: true,
 		callbacks: fitCallbacks
 	});
@@ -273,7 +274,12 @@ class MnistData {
 }
 
 
-async function run() { 
+async function run() {
+  const startBtn = document.querySelector('#start-training');
+  startBtn.disabled = true;
+  const spinner = startBtn.querySelector('.spinner-border');
+  spinner.style.display = 'block';
+
   const data = new MnistData();
   await data.load();
   // await showExamples(data);
@@ -282,6 +288,11 @@ async function run() {
   await train(model, data);
   await showAccuracy(model, data);
   await showConfusion(model, data);
+  
+  startBtn.disabled = false;
+  spinner.style.display = 'none';
 }
 
-document.addEventListener('DOMContentLoaded', run);
+//document.addEventListener('DOMContentLoaded', run);
+const startBtn = document.querySelector('#start-training')
+startBtn.addEventListener('click', run);
